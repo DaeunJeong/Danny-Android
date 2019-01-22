@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StartActivity">
+
+    <ImageButton
+        android:id="@+id/btn_start_choose_location"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/ic_location"
+        android:backgroundTint="@color/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_start_search_location"
+        app:layout_constraintVertical_bias="0.4"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="직접 위치 선택"
+        app:layout_constraintTop_toBottomOf="@id/btn_start_choose_location"
+        app:layout_constraintStart_toStartOf="@id/btn_start_choose_location"
+        app:layout_constraintEnd_toEndOf="@id/btn_start_choose_location"/>
+
+    <ImageButton
+        android:id="@+id/btn_start_search_location"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/ic_search"
+        android:backgroundTint="@color/colorPrimary"
+        app:layout_constraintStart_toEndOf="@id/btn_start_choose_location"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.4"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="검색해서 위치 선택"
+        app:layout_constraintTop_toBottomOf="@id/btn_start_search_location"
+        app:layout_constraintStart_toStartOf="@id/btn_start_search_location"
+        app:layout_constraintEnd_toEndOf="@id/btn_start_search_location"/>
+
+
+</android.support.constraint.ConstraintLayout>
