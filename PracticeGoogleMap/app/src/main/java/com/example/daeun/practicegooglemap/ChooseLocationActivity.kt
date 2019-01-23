@@ -26,6 +26,7 @@ class ChooseLocationActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private var lat = 0.0
     private var lng = 0.0
+    private var locationCenter = LatLng(0.0, 0.0)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +47,7 @@ class ChooseLocationActivity : AppCompatActivity(), OnMapReadyCallback {
                 //GPS 설정화면으로 이동
                 startActivity(intent)
             }
-            var mHandler = Handler()
+            val mHandler = Handler()
             mHandler.postDelayed(mMyTask, 1500)
         }
 
@@ -54,8 +55,9 @@ class ChooseLocationActivity : AppCompatActivity(), OnMapReadyCallback {
             override fun onLocationChanged(location: Location) {
                 lat = location.latitude
                 lng = location.longitude
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lat,lng),16f))
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lat, lng), 16f))
             }
+
             override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
             override fun onProviderEnabled(provider: String) {}
             override fun onProviderDisabled(provider: String) {}
@@ -68,6 +70,13 @@ class ChooseLocationActivity : AppCompatActivity(), OnMapReadyCallback {
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 100f, locationListener)
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 100f, locationListener)
 
+        btn_choose_location_finish.setOnClickListener {
+            val intent = Intent(this, ResultActivity::class.java)
+            intent.putExtra("address", text_location.text)
+            intent.putExtra("lat", locationCenter.latitude)
+            intent.putExtra("lng", locationCenter.longitude)
+            startActivity(intent)
+        }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -75,22 +84,23 @@ class ChooseLocationActivity : AppCompatActivity(), OnMapReadyCallback {
         val geocoder = Geocoder(this, Locale.KOREA)
         var list: List<Address> = emptyList()
 
-
+        //사용자가 위치를 옮기기 시작할 때
         mMap.setOnCameraMoveStartedListener {
             text_location.text = "위치 이동 중..."
             text_choose_location_lat.text = "위도: 없음"
             text_choose_location_lng.text = "경도: 없음"
         }
 
+        //사용자가 위치를 옮겼을 때
         mMap.setOnCameraIdleListener {
-            val locationCenter = mMap.cameraPosition.target
-            list = geocoder.getFromLocation(locationCenter.latitude,locationCenter.longitude,1)
+            locationCenter = mMap.cameraPosition.target
+            list = geocoder.getFromLocation(locationCenter.latitude, locationCenter.longitude, 1)
             if (list.isEmpty()) {
                 text_location.text = "해당되는 주소 정보 없음"
             } else {
                 text_location.text = list[0].getAddressLine(0)
-                text_choose_location_lat.text = "위도: ${String.format("%.3f", locationCenter.latitude).toDouble()}"
-                text_choose_location_lng.text = "경도: ${String.format("%.3f", locationCenter.longitude).toDouble()}"
+                text_choose_location_lat.text = "위도: ${String.format("%.3f", locationCenter.latitude)}"
+                text_choose_location_lng.text = "경도: ${String.format("%.3f", locationCenter.longitude)}"
             }
         }
     }
